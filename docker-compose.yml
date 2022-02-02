@@ -1,0 +1,33 @@
+version: '3'
+services:
+  reverse-proxy:
+    image: traefik 
+    command: --api --docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - ./traefik/certificados/acme.json:/etc/traefik/acme.json
+      - ./traefik/confs/traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  fontes.aptans:
+    image: basico
+    volumes:
+      - ./joaozinho/joaozinho-www/:/var/www/html/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:fontes.aptans.com"
+      - "traefik.protocol=http"
+    tty: true
+
+  testefontes:
+    image: basico
+    volumes:
+      - ./mariazinha/mariazinha-www/:/var/www/html/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:testefontes.aptans.com"
+      - "traefik.protocol=http"
+    tty: true

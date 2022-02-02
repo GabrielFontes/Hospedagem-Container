@@ -1,0 +1,37 @@
+debug = false
+
+# Nível do log
+logLevel = "ERROR"
+
+# Para frontends que não tiverem seus entrypoints definidos, serão usados os setados abaixo
+defaultEntryPoints = ["https","http"]
+
+# Definição das portas de entrada
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+  [entryPoints.https.tls]
+
+# Se houver erro de rede, tente novamente
+[retry]
+
+[api]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = ""
+watch = true
+exposedByDefault = false
+
+[acme]
+email = ""
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.httpChallenge]
+entryPoint = "http"
+
